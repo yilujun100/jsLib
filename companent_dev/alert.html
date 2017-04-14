@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	.winpop-mask,
+	.winpop-box {
+	    display: none;
+	    position: fixed;
+	}
+
+	.winpop-mask {
+	    left: 0;
+	    top: 0;
+	    z-index: 999;
+	    width: 100%;
+	    height: 100%;
+	    background-color: #000;
+	    opacity: .3;
+	    filter: alpha(opacity=30);
+	}
+
+	.winpop-box {
+	    left: 50%;
+	    top: 50%;
+	    z-index: 1000;
+	    margin-top: -100px;
+	    margin-left: -160px;
+	    width: 320px;
+	    height: 200px;
+	    background-color: #fff;
+	}
+
+	.winpop-box .winpop-content {
+	    padding: 62px 20px;
+	    height: 32px;
+	    line-height: 32px;
+	    text-align: center;
+	    color: #666;
+	    font-size: 16px;
+	}
+
+	.winpop-box .winpop-bottom {
+	    position: absolute;
+	    left: 0;
+	    bottom: 0;
+	    width: 100%;
+	    text-align: center;
+	    overflow: hidden;
+	}
+
+	.winpop-box .pop-btn {
+	    float: left;
+	    position: relative;
+	    /*margin-left: -1px;*/
+	    width: 50%;
+	    height: 44px;
+	    border: 1px solid #555;
+	    background-color: #555;
+	    color: #fff;
+	    font: 14px/1.5 '\5fae\8f6f\96c5\9ed1', Arial, Tahoma, sans-serif;
+	    font-size: 18px;
+	    cursor: pointer;
+	}
+
+	.winpop-box .pop-btn:hover {
+	    background-color: #403F40;
+	    color: #FFF219;
+	}
+
+	.winpop-box .btn-confirm-true {
+	    /*margin-left: -1px\9;*/
+	    border-left-color: #333;
+	}
+
+	.winpop-box .btn-alert {
+	    width: 100%;
+	}
+	</style>
+</head>
+<body>
+	<input type="button" id="btnAlert" value="自定义alert控件">
+	<input type="button" id="btnConfirm" value="自定义confirm控件">
+	<script type="text/javascript" src="jquery-2.1.4.min.js"></script>
+	<script>
+		(function(window, jQuery, undefined) {
+
+			var HTMLS = {
+				ovl: '<div class="winpop-mask" id="winpopMask"></div>' + '<div class="winpop-box" id="winpopBox"><div class="winpop-content"></div><div class="winpop-bottom"></div></div>',
+				alert: '<input type="button" class="pop-btn btn-alert" value="确定">',
+				confirm: '<input type="button" class="pop-btn btn-confirm btn-confirm-false" value="取消"><input type="button" class="pop-btn btn-confirm btn-confirm-true" value="确认">'
+			};
+
+			function Winpop() {
+				var config = {};
+				this.get = function(n) {
+					return config[n];
+				};
+
+				this.set = function(n, v) {
+					config[n] = v;
+				};
+				this.init();
+			}
+
+			Winpop.prototype = {
+				init: function() {
+					this.createDom();
+					this.bindEvent();
+				},
+				createDom: function() {
+					var body = jQuery('body'),
+						ovl = jQuery('#winpopBox');
+
+					if (ovl.length === 0) {
+						body.append(HTMLS.ovl);
+					}
+
+					this.set('ovl', jQuery('#winpopBox'));
+					this.set('mask', jQuery('#winpopMask'));
+				},
+				bindEvent: function() {
+					var that = this,
+						ovl = that.get('ovl'),
+						mask = that.get('mask');
+
+					ovl.on('click', '.btn-alert', function(e) {
+						that.hide();
+					});
+
+					ovl.on('click', '.btn-confirm-true', function(e) {
+						var cb = that.get('confirmBack');
+						that.hide();
+						cb && cb(true);
+					});
+
+					ovl.on('click', '.btn-confirm-false', function(e) {
+						var cb = that.get('confirmBack');
+						that.hide();
+						cb && cb(false);
+					});
+
+					mask.on('click', function(e) {
+						that.hide();
+					});
+
+					jQuery(document).on('keyup', function(e) {
+						var kc = e.keyCode,
+							cb = that.get('confirmBack');
+
+						if (kc === 27) { // esc
+							that.hide();
+						} else if (kc === 13) {
+							that.hide();
+							if (that.get('type') === 'confirm') {
+								cb && cb(true);
+							}
+						}
+					});
+				},
+				alert: function(str, btnstr) {
+					var str = typeof str === 'string' ? str : str.toString(),
+						ovl = this.get('ovl');
+					this.set('type', 'alert');
+					ovl.find('.winpop-content').html(str);
+					if (typeof btnstr == 'undefined') {
+						ovl.find('.winpop-bottom').html(HTMLS.alert);
+					} else {
+						ovl.find('.winpop-bottom').html(btnstr);
+					}
+					this.show();
+				},
+				confirm: function(str, callback) {
+					var str = typeof str === 'string' ? str : str.toString(),
+						ovl = this.get('ovl');
+					this.set('type', 'confirm');
+					ovl.find('.winpop-content').html(str);
+					ovl.find('.winpop-bottom').html(HTMLS.confirm);
+					this.set('confirmBack', (callback || function() {}));
+					this.show();
+				},
+				show: function() {
+					this.get('ovl').show();
+					this.get('mask').show();
+				},
+				hide: function() {
+					var ovl = this.get('ovl');
+					ovl.find('.winpop-content').html('');
+					ovl.find('.winpop-bottom').html('');
+					ovl.hide();
+					this.get('mask').hide();
+				},
+				destory: function() {
+					this.get('ovl').remove();
+					this.get('mask').remove();
+					delete window.alert;
+					delete window.confirm;
+				}
+			};
+
+			var obj = new Winpop();
+			window.alert = function(str) {
+				obj.alert.call(obj, str);
+			};
+			window.confirm = function(str, cb) {
+				obj.confirm.call(obj, str, cb);
+			};
+
+			// window.Winpop = window.Winpop || Winpop;
+		})(window, jQuery);
+	</script>
+	<script>
+		$(function() {
+			$('#btnAlert').on('click', function() {
+				alert('自定义alert控件');
+			});
+
+			$('#btnConfirm').on('click', function() {
+				confirm('关闭自定义Confirm组件吗?', function(flag) {
+					if (flag) {
+						alert('True');
+					} else {
+						alert('Flase');
+					}
+				});
+			});
+		})
+	</script>
+</body>
+</html>

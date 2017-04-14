@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>拖拽的组件开发</title>
+	<style>
+		#div1 { position: absolute; top: 0; left: 0; width: 100px; height: 100px; background: red; }
+		#div2 { position: absolute; top: 0; left: 100px; width: 100px; height: 100px; background: yellow; }
+		#div3 { position: absolute; top: 0; left: 200px; width: 100px; height: 100px; background: blue; }
+		#div4 { position: absolute; top: 0; left: 300px; width: 100px; height: 100px; background: green; }
+	</style>
+	<script>
+		// 组件开发: 多组对象,像兄弟之间的关系( 代码复用的一种形式 )
+			// 1.参数不写报错
+			// 2.参数过多,参数顺序的问题
+		window.onload = function() {
+			var d1 = new Drag();
+			d1.init('div1');
+
+			var d2 = new Drag();
+			d2.init('div2', function() {
+				document.title = 'hello';
+			});
+
+			var d3 = new Drag();
+			d3.init('div3', function() {
+				document.title = 'miaov';
+			}, function() {
+				document.title = 'ketang';
+			});
+
+			var d4 = new Drag();
+			d4.init('div4', function() {}, function() {
+				document.title = 'byebye';
+			});
+		};
+
+		function Drag() {
+			this.obj = null;
+			this.disX = 0;
+			this.disY = 0;
+		}
+
+		Drag.prototype.init = function(id, toDown, toUp) {
+			var that = this;
+			this.obj = document.getElementById(id);
+			this.obj.onmousedown = function(ev) {
+				var ev = ev || window.event;
+				that.fnDown(ev);
+
+				toDown();
+
+				document.onmousemove = function(ev) {
+					that.fnMove(ev);
+				};
+
+
+				document.onmouseup = function() {
+					that.fnUp();
+					toUp()
+				};
+
+
+				return false;
+			};
+		};
+
+		Drag.prototype.fnDown = function(ev) {
+			var that = this;
+			this.disX = ev.clientX - this.obj.offsetLeft;
+			this.disY = ev.clientY - this.obj.offsetTop;
+
+		};
+
+		Drag.prototype.fnMove = function(ev) {
+			this.obj.style.left = ev.clientX - this.disX + 'px';
+			this.obj.style.top = ev.clientY - this.disY + 'px';
+		};
+
+		Drag.prototype.fnUp = function() {
+			document.onmousemove = null;
+			document.onmouseup = null;
+		};
+	</script>
+</head>
+<body>
+	<div id="div1"></div>
+	<div id="div2"></div>
+	<div id="div3"></div>
+	<div id="div4"></div>
+</body>
+</html>
