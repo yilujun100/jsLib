@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向对象继承2——类式继承</title>
+</head>
+<body>
+	<script>
+		// js中没有类的概念,js中的类是通过构造函数来实现的
+		// 要做属性和方法的继承,要分开继承
+		// 父类
+		function Parent() {
+			this.name = [1, 2, 3];
+		}
+
+		Parent.prototype.showName = function() {
+			alert(this.name);
+		};
+		// 子类
+		function Sub() {
+			Parent.call(this);
+		}
+
+		var F = function() {};
+		F.prototype = Parent.prototype;
+		Sub.prototype = new F();
+		Sub.prototype.constructor = Sub; // 修正子类原型下面的constructor
+
+		/*var obj = new Sub();
+		console.log(obj.name); // 小明
+		console.log(obj.constructor); // function Parent() {}*/
+		/*var obj1 = new Sub();
+		obj1.name.push(4);
+		var obj2 = new Sub();
+		console.log(obj2.name); // [1, 2, 3, 4]*/
+		var obj1 = new Sub();
+		obj1.name.push(4);
+		console.log(obj1.name);
+		var obj2 = new Sub();
+		console.log(obj2.name);
+	</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>js继承2</title>
+</head>
+<body>
+	<script>	
+		var Mammal = function(name) {
+			this.name = name;
+		};
+		Mammal.prototype.getName = function() {
+			return this.name;
+		};
+		Mammal.prototype.says = function() {
+			return this.saying || '';
+		}
+		
+		/*var Cat = function(name) {
+			this.name = name;
+			this.saying = 'meow';
+		};*/
+		// 替换Cat.prototype为一个新的Mammal实例
+		/*Cat.prototype =  new Mammal();
+		Cat.prototype.purr = function(n) {
+			var i, s = '';
+			for (i = 0; i < n; i++) {
+				if (s) {
+					s += '-';
+				}
+				s += 'r';
+			}
+			return s;
+		};
+		Cat.prototype.getName = function() {
+			return this.says() + ' ' + this.name + ' ' + this.says();
+		};
+		var myCat = new Cat('Henrietta');
+		var says = myCat.says(); // 'meow'
+		var purr = myCat.purr(5); // 'r-r-r-r-r'
+		var name = myCat.getName(); // 'meow Henrietta meow'*/
+		
+		Function.prototype.method = function(name, func) {
+			if (!this.prototype[name]) {
+				this.prototype[name] = func;
+			}
+			return this;
+		};
+		Function.method('inherit', function(Parent) {
+			this.prototype = new Parent();
+			return this;
+		});
+		var Cat = function(name) {
+			this.name = name;
+			this.saying = 'meow';
+		}
+		.inherit(Mammal)
+		.method('purr', function(n) {
+			var i, s = '';
+			for (i = 0; i < n; i++) {
+				if (s) {
+					s += '-';
+				}
+				s += 'r';
+			}
+			return s;
+		})
+		.method('getName', function() {
+			return this.says() + ' ' + this.name + ' ' + this.says();
+		});
+	</script>
+</body>
+</html>

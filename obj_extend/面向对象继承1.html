@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向对象继承1——拷贝继承</title>
+</head>
+<body>
+	<script>
+		// 父类
+		function CreatePerson(name, sex) {
+			this.name = name;
+			this.sex = sex;
+		}
+		CreatePerson.prototype.showName = function() {
+			alert(this.name);
+		};
+
+		// 子类
+			// 属性的继承:调用父类的构造函数 call
+			// 方法的继承: for in 拷贝继承(jquery也是采用的拷贝继承)
+		function CreateStar(name, sex, job) {
+			CreatePerson.call(this, name, sex);
+			this.job = job;
+		}
+		// CreateStar.prototype = CreatePerson.prototype;
+		extend(CreateStar.prototype, CreatePerson.prototype)
+		CreateStar.prototype.showJob = function() {
+			alert(this.job);
+		};
+
+		var p1 = new CreatePerson('小明', '男');
+
+		var p2 = new CreateStar('黄晓明', '男', '演员');
+		console.log(p1);
+		console.log(p2);
+
+		function extend(obj1, obj2) {
+			for (var attr in obj2) {
+				obj1[attr] = obj2[attr];
+			}
+		}
+	</script>
+</body>
+</html>
