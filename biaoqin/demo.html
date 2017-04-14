@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style type="text/css">
+		.comment{width:680px; margin:20px auto; position:relative}
+		.comment h3{height:28px; line-height:28px}
+		.com_form{width:100%; position:relative}
+		.textarea{width:99%; height:60px; border:1px solid #ccc}
+		.com_form p{height:28px; line-height:28px; position:relative}
+		span.emotion{width:42px; height:20px; background:url(images/icon.gif) no-repeat 2px 2px; padding-left:20px; cursor:pointer}
+		span.emotion:hover{background-position:2px -28px}
+		.qqFace{margin-top:4px;background:#fff;padding:2px;border:1px #dfe6f6 solid;}
+		.qqFace table td{padding:0px;}
+		.qqFace table td img{cursor:pointer;border:1px #fff solid;}
+		.qqFace table td img:hover{border:1px #0066cc solid;}
+		#resulte{width:680px; margin:20px auto}
+		.btn {position:absolute; right:0px; top:0;display: inline-block;}
+	</style>
+	<script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.qqFace.js"></script>
+</head>
+<body>
+	<div class="container" id="main">
+		<div class="demo">
+			<div id="resulte"></div>
+			<div class="comment">
+				<div class="com_form">
+					<textarea class="textarea" id="content" name="content"></textarea>
+					<p>
+						<input type="button" class="btn" id="sub" value="提交"/>
+						<span class="emotion">表情</span>
+					</p>
+				</div>
+			</div>   
+		</div>  
+	</div>
+	 <script type="text/javascript">
+            $(function() {
+                $('.emotion').qqFace({
+                    id: 'facebox', //表情ID
+                    assign: 'content', //赋予到具体位置
+                    path: 'face/'	//表情路径
+                });
+                $("#sub").click(function() {
+                    var content  = $("#content").val();
+                    $("#resulte").html(replace_em(content));//转换成表情图片
+                    $("#content").val('');
+                });
+            });
+            function replace_em(str) { //表情符号替换成图片
+                str = str.replace(/\</g, '&lt;');
+                str = str.replace(/\>/g, '&gt;');
+                str = str.replace(/\n/g, '<br/>');
+                str = str.replace(/\[em_([0-9]*)\]/g, '<img src="face/$1.gif" border="0" />');
+                return str;
+            }
+        </script>
+</body>
+</html>

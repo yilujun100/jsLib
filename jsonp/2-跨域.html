@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script>
+		
+	</script>
+</head>
+<body>
+	<p>jsonp:json with padding</p>
+	<p>jsonp原理:动态的添加一个script标签,script标签是没有跨域的限制的</p>
+	<p>jsonp执行过程:</p>
+	<p>1.首先在客户端注册一个callback('如:jsoncallback'),然后把callback的名字传给服务端</p>
+	<p>2.然后以javascript语法的方式,生成一个function,function名字就是传递上来的参数'jsoncallback'的值</p>
+	<p>3.最后将json数据直接以入参的方式传递给我们定义的同名函数</p>
+</body>
+</html>

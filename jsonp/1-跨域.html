@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>js跨域</title>
+</head>
+<body>
+	<script>
+		var xhr = getXMLHttpRequest();
+		xhr.open('GET', 'a.txt', true);
+		xhr.send(null);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				console.log(xhr.responseText);
+			}
+		}
+
+		function getXMLHttpRequest() {
+			var xhr;
+
+			if (window.ActiveXObject) {
+				xhr = new ActiveXObject('Microsoft.XMLHTTP');
+			} else if (window.XMLHttpRequest) {
+				xhr = new XMLHttpRequest();
+			} else {
+				xhr = null;
+			}
+
+			return xhr;
+		}
+	</script>
+</body>
+</html>

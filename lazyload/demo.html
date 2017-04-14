@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>图片懒加载</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<style>
+		ul, li { margin: 0; padding: 0; }
+		img { border: 0; }
+		ul { list-style: none; }
+		.clearfix:after { content: ''; display: block; clear: both; height: 0; overflow: hidden; visibility: hidden; }
+		.clearfix { zoom: 1; }
+		.viewport { position: relative; margin: 0 auto; min-width: 320px; max-width: 640px; }
+		.pic-list li { float: left; width: 100%; margin-top: 8%; }
+		.no-more { text-align: center; font-size: 15px; color: #333; }
+	</style>
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<script>
+	var lazyLoad = {
+		IsShow: function(e) {
+			return $(window).height() + $(window).scrollTop() > e.offset().top;
+		},
+		LoadImage: function() {
+			var e = this,
+				t = $('img[lazyload]');
+			t.each(function(){
+				var t = $(this);
+				if (e.IsShow(t)) {
+					var n = t.attr('lazyload');
+					t.removeAttr('lazyload'),
+					t.attr('src', n),
+					t.show();
+				}
+			});
+		},
+		Run: function() {
+			var e = this;
+			e.LoadImage(),
+			e.bind || ($(window).bind('touchmove touchend scroll', function() {
+				e.LoadImage();
+			}),
+			e.bind = !0)
+		}
+	};
+	$(function(){
+		lazyLoad.Run();
+	});
+	/*function showImg(){
+		var aImg = $('img[lazyload]');
+		aImg.each(function(){
+			var e = $(this);
+			if ($(window).height() + $(window).scrollTop() > e.offset().top) {
+				var _src = e.attr('lazyload');
+				e.removeAttr('lazyload').
+					attr('src', _src);
+			}
+		});
+	}
+
+	function loadMore(){
+		var _win = $(window),
+			viewH = _win.height(),
+			contentH = $(document).height(),
+			scrollTop = _win.scrollTop();
+
+		if ((contentH - viewH) - scrollTop <= 180) {
+			if ($('.pic-list li').length > 20) {
+				$('.pic-list').children().find('.no-more').remove().end().
+					append('<li class="no-more">没有更多数据</li>');
+			} else {
+				$.ajax({
+					url: './js/data.js',
+					dataType: 'html',
+					type: 'get',
+					success: function(result){
+						var result = eval('('+ result +')');
+						var _tmpl = tmpl(result);
+						$('.pic-list').append(_tmpl);
+					}
+				});				
+			}
+		}
+	}
+
+	function tmpl(param){
+		var _tmpl = [];
+		for (var i = 0, len = param.length; i<len; i++) {
+			_tmpl.push('<li><img src="img/place_holder.png" width="100%" lazyload="'+ param[i].pic +'" alt=""></li>');
+		}
+		return _tmpl.join('');	
+	}
+
+
+	$(function(){
+		// lazyLoad.Run();
+		showImg();
+		$(window).on('scroll', function(){
+			showImg();
+			loadMore();
+		});
+	})*/
+	</script>
+</head>
+<body>
+	<div class="viewport">
+		<ul class="pic-list">
+			<li><img src="img/place_holder.png" width="100%" lazyload="./img/1.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="./img/2.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="./img/3.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="./img/4.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="./img/5.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="./img/6.jpg" alt=""></li>
+			<!-- <li><img src="img/place_holder.png" width="100%" lazyload="http://localhost/learn/lazyload/img/1.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="http://localhost/learn/lazyload/img/2.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="http://localhost/learn/lazyload/img/3.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="http://localhost/learn/lazyload/img/4.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="http://localhost/learn/lazyload/img/5.jpg" alt=""></li>
+			<li><img src="img/place_holder.png" width="100%" lazyload="http://localhost/learn/lazyload/img/6.jpg" alt=""></li> -->
+		</ul>		
+	</div>
+</body>
+</html>

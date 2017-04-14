@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="jquery-2.1.4.min.js"></script>
+	<script>
+		$(function() {
+			var oBtn = $('#btnReceive'),
+				iMax = 30,
+				timer = null;
+			oBtn.on('click', function() {
+				var _this = $(this);
+				_this.text(iMax + 's').attr('disabled', true);
+				timer = setInterval(function() {
+					if (iMax <= 0) {
+						clearInterval(timer);
+						iMax = 30;
+						_this.text('立即领取').attr('disabled', false);
+					} else {
+						iMax--;
+						_this.text(iMax + 's');						
+					}
+				}, 1000);	
+			});	
+		});
+	</script>
+</head>
+<body>
+	<button id="btnReceive">立即领取</button>
+</body>
+</html>
