@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>	
+<script>
+	/*var a = 6;
+	setTimeout(function() {
+		alert(a);
+		a = 666;
+	}, 1000);
+	a = 66;*/
+
+	var data = {
+		id: 'xxx',
+		name: 'xxxx',
+		children:[
+			{
+				id: 'a',
+				name: 'aaaa',
+				children: [
+					{
+						id: 'a1',
+						name: 'aaaa1',
+						children: false
+					},
+					{
+						id: 'a2',
+						name: 'aaaa2',
+						children: false						
+					}
+				]
+			},
+			{
+				id: 'b',
+				name: 'bbbb',
+				children: false
+			},
+			{
+				id: 'c',
+				name: 'cccc',
+				children: [
+					{
+						id: 'c1',
+						name: 'cccc1',
+						children: [
+							{
+								id: 'c11',
+								name: 'a',
+								children: false
+							},
+							{
+								id: 'c12',
+								name: 'b',
+								children: false						
+							},
+							{
+								id: 'c13',
+								name: 'c',
+								children: false
+							},
+							{
+								id: 'c14',
+								name: 'd',
+								children: false						
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+
+	function getNodeById(data, id) {
+		var result = null;
+		for (var i = 0, len = data.children.length; i < len; i++) {
+			var childs = data.children[i].children;
+
+			if (data.children[i].id === id) {
+				// console.log(data.children[i]);
+				result = data.children[i];
+				return result;
+			}
+
+			if (childs && childs.length > 0) {
+				result = getNodeById(data.children[i], id);
+			}
+		}
+		return result;
+	}
+
+	var id = 'c11';
+	var node = getNodeById(data, id);
+	console.log(node);
+
+
+	/*markyun.Event = {
+	    // 页面加载完成后
+	    readyEvent : function(fn) {
+	        if (fn==null) {
+	            fn=document;
+	        }
+	        var oldonload = window.onload;
+	        if (typeof window.onload != 'function') {
+	            window.onload = fn;
+	        } else {
+	            window.onload = function() {
+	                oldonload();
+	                fn();
+	            };
+	        }
+	    },
+	    // 视能力分别使用dom0||dom2||IE方式 来绑定事件
+	    // 参数： 操作的元素,事件名称 ,事件处理程序
+	    addEvent : function(element, type, handler) {
+	        if (element.addEventListener) {
+	            //事件类型、需要执行的函数、是否捕捉
+	            element.addEventListener(type, handler, false);
+	        } else if (element.attachEvent) {
+	            element.attachEvent('on' + type, function() {
+	                handler.call(element);
+	            });
+	        } else {
+	            element['on' + type] = handler;
+	        }
+	    },
+	    // 移除事件
+	    removeEvent : function(element, type, handler) {
+	        if (element.removeEnentListener) {
+	            element.removeEnentListener(type, handler, false);
+	        } else if (element.datachEvent) {
+	            element.detachEvent('on' + type, handler);
+	        } else {
+	            element['on' + type] = null;
+	        }
+	    }, 
+	    // 阻止事件 (主要是事件冒泡，因为IE不支持事件捕获)
+	    stopPropagation : function(ev) {
+	        if (ev.stopPropagation) {
+	            ev.stopPropagation();
+	        } else {
+	            ev.cancelBubble = true;
+	        }
+	    },
+	    // 取消事件的默认行为
+	    preventDefault : function(event) {
+	        if (event.preventDefault) {
+	            event.preventDefault();
+	        } else {
+	            event.returnValue = false;
+	        }
+	    },
+	    // 获取事件目标
+	    getTarget : function(event) {
+	        return event.target || event.srcElement;
+	    },
+	    // 获取event对象的引用，取到事件的所有信息，确保随时能使用event；
+	    getEvent : function(e) {
+	        var ev = e || window.event;
+	        if (!ev) {
+	            var c = this.getEvent.caller;
+	            while (c) {
+	                ev = c.arguments[0];
+	                if (ev && Event == ev.constructor) {
+	                    break;
+	                }
+	                c = c.caller;
+	            }
+	        }
+	        return ev;
+	    }
+	}; */
+</script>
+</body>
+</html>
