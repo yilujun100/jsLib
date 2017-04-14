@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>数组去重</title>
+	</head>
+	<body>
+		<script>
+			// 一个数组去除重复
+			var student = ['qiang', 'ming', 'tao', 'li', 'liang', 'you', 'qiang', 'tao'];
+			console.log(unique(student));
+			function unique(arr){
+				var tmp = [];
+				for (var i in arr) {
+					if (tmp.indexOf(arr[i]) == -1) {
+						tmp.push(arr[i]);
+					}
+				}
+				return tmp;
+			}
+			
+			// 两个数组合并,去除重复
+			var arr1 = [1, 2, 3, 4];
+			var arr2 = [3, 4, 5, 6];
+			console.log(mergeArray(arr1, arr2));
+			
+			function mergeArray(arr1, arr2){
+				var _arr = [];
+				for (var i=0; i<arr1.length; i++) {
+					_arr.push(arr1[i]);
+				}
+				var _dup;
+				for (var i=0; i<arr2.length; i++) {
+					_dup = false;
+					for (var j=0; j<arr1.length; j++) {
+						if (arr2[i] == arr1[j]) {
+							_dup = true;
+							break;
+						}
+					}
+					if (!_dup) {
+						_arr.push(arr2[i]);
+					}
+				}
+				return _arr;
+			}
+		</script>
+	</body>
+</html>
